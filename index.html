@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+</head>
+
+<body>
+    
+    <div id="buttons"></div>
+    <div id=""></div>
+    <form id="cool-form">   
+        <input type="text" id="cool-input">
+        <input type="submit" id="add-cool">
+       
+    </form>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
+        "cool" + "&api_key=dc6zaTOxFJmzC&limit=10";
+
+      // Performing an AJAX request with the queryURL
+      $.ajax({
+          url: queryURL,
+          method: "GET"
+        })
+
+        console.log (queryURL);
+        //1a assign an array of strings to a var, static
+        //1b loop over array, for each item in array create a button
+        //2  coolArray.forEach(function buttonGen(val){
+        //        //create btn $(btn)   
+        //    //append to btn list container 
+        //
+  
+          /*2  lookup coolArray.forEach(function (val) {
+    	console.log(   jQuery("<p>" + val + "</p>")   )
+        }) */
+    
+
+        //3 create onclick for submit
+        //3 ajax call within onclick  
+        //3 get info from ajax call 
+        //3 var results = response.data.images forEach method image array       
+        //3 $("#animals").append(results)
+
+
+        //3 create onclick for giph still    
+        //3 data-animate, data-state, data-still
+        
+        //4 pausing gifs
+    
+    })
+
+
+    </script>
+</body>
+
+</html>
