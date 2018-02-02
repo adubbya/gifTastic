@@ -2,58 +2,102 @@
 <html>
 
 <head>
-
+    <meta charset="UTF-8">
+    <title>Weird Stuff</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ"
+        crossorigin="anonymous">
 </head>
 
 <body>
-    
-    <div id="buttons"></div>
+ // still very ugly, yesyes form over function...
+    <div id="buttons-view"></div>
+    <div id="gifs-appear-here">
+    </div>
     <div id=""></div>
-    <form id="cool-form">   
+    <form id="cool-form">
         <input type="text" id="cool-input">
         <input type="submit" id="add-cool">
-       
+
     </form>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script type="text/javascript">
-        $(document).ready(function(){
-            var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
-        "cool" + "&api_key=dc6zaTOxFJmzC&limit=10";
 
-      // Performing an AJAX request with the queryURL
-      $.ajax({
-          url: queryURL,
-          method: "GET"
-        })
+// need start with still gifs, animate gif on click, pause on click again.
+// need to have user input executed by submit button to generate a new gif button
 
-        console.log (queryURL);
-        //1a assign an array of strings to a var, static
-        //1b loop over array, for each item in array create a button
-        //2  coolArray.forEach(function buttonGen(val){
-        //        //create btn $(btn)   
-        //    //append to btn list container 
-        //
-  
-          /*2  lookup coolArray.forEach(function (val) {
-    	console.log(   jQuery("<p>" + val + "</p>")   )
-        }) */
-    
+$(document).ready(function () {
+    // sry for these topics    
+    var topics = ["burger", "pizza", "taco"];
+    // custom call for topics w/ limit of 10 + apikey + https
+    var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
+        topics + "&api_key=dc6zaTOxFJmzC&limit=10";
 
-        //3 create onclick for submit
-        //3 ajax call within onclick  
-        //3 get info from ajax call 
-        //3 var results = response.data.images forEach method image array       
-        //3 $("#animals").append(results)
-
-
-        //3 create onclick for giph still    
-        //3 data-animate, data-state, data-still
-        
-        //4 pausing gifs
-    
+    // AJAX call with queryURL
+    $.ajax({
+        url: queryURL,
+        method: "GET"
     })
+        .then(function (response) {
 
+            // storing the data from the AJAX request in the results variable
+            var results = response.data;
+
+            // Function for gif buttons
+            function renderButtons() {
+
+                // clear buttons before adding
+                $("#buttons-view").empty();
+
+                // Looping through the array of gifs
+                for (var i = 0; i < topics.length; i++) {
+                    // jquery dynamic button
+                    var a = $("<button>");
+                    // Adding a pretty clas of btn-danger to our button
+                    a.addClass("btn-danger");
+                    // Adding a data-attribute
+                    a.attr("data-gif", topics[i]);
+                    // Providing the initial button text
+                    a.text(topics[i]);
+                    // Adding the button to the buttons-view div
+                    $("#buttons-view").append(a);
+                }
+            };
+
+            renderButtons();
+       // can't quite figure out the button clicks generating separately, acts as if its the same query regardless
+            // Looping through each result item for display onclick i think is needed here
+            $("button").on("click", function () {
+
+                $("#gifs-appear-here").empty();
+
+                topics = $(this).attr("data-gif");
+
+                for (var i = 0; i < results.length; i++) {
+                    // keep it kid friendly.....ish
+                    if (results[i].rating !== "r" && results[i].rating !== "pg-13") {
+                        // Creating and storing a div tag
+                        var coolDiv = $("<div>");
+
+                        // Creating a paragraph tag with the result item's rating
+                        var p = $("<p>").text("Rating: " + results[i].rating);
+
+                        // Creating and storing an image tag
+                        var coolImage = $("<img>");
+                        // Setting the src attribute of the image to a property pulled off the result item
+                        coolImage.attr("src", results[i].images.fixed_height.url);
+
+                        // Appending the paragraph and image tag to the animalDiv
+                        coolDiv.append(p);
+                        coolDiv.append(coolImage);
+
+                        // Prependng the animalDiv to the HTML page in the "#gifs-appear-here" div
+                        $("#gifs-appear-here").prepend(coolDiv);
+                    };
+                };
+            });
+        });    
+    });    
 
     </script>
 </body>
